@@ -1,0 +1,161 @@
+import src.gatos.*
+import src.ratones.*
+
+describe "Tom | Verificar energía inicial" {
+    test "Given: Tom al inicio | When: consultamos energia() | Then: debería retornar 50" {
+        assert.equals(50, tom.energia())
+    }
+}
+
+describe "Tom | Verificar energía consumida por correr" {
+    test "Given: Tom al inicio | When: consultamos energiaConsumidaPorCorrer(20) | Then: debería retornar 10" {
+        assert.equals(10, tom.energiaConsumidaPorCorrer(20))
+    }
+
+    test "Given: Tom al inicio | When: consultamos energiaConsumidaPorCorrer(0) | Then: debería retornar 0" {
+        assert.equals(0, tom.energiaConsumidaPorCorrer(0))
+    }
+
+    test "Given: Tom al inicio | When: consultamos energiaConsumidaPorCorrer(100) | Then: debería retornar 50" {
+        assert.equals(50, tom.energiaConsumidaPorCorrer(100))
+    }
+}
+
+describe "Tom | Verificar velocidad máxima" {
+    test "Given: Tom al inicio | When: consultamos velocidadMaxima() | Then: debería retornar 10" {
+        assert.equals(10, tom.velocidadMaxima())
+    }
+
+    test "Given: Tom come a Jerry | When: consultamos velocidadMaxima() | Then: debería retornar 15.2" {
+        tom.comer(jerry)
+        assert.equals(15.2, tom.velocidadMaxima())
+    }
+
+    test "Given: Tom corre 24 mts | When: consultamos velocidadMaxima() | Then: debería retornar 14" {
+        tom.comer(jerry)
+        tom.correr(24)
+        assert.equals(14, tom.velocidadMaxima())
+    }
+
+    test "Given: Tom come a Nibbles | When: consultamos velocidadMaxima() | Then: debería retornar 18.7" {
+        tom.comer(jerry)
+        tom.correr(24)
+        tom.comer(nibbles)
+        assert.equals(18.7, tom.velocidadMaxima())
+    }
+
+    test "Given: Jerry cumple años y Tom vuelve a comer a Nibbles | When: consultamos velocidadMaxima() | Then: debería retornar 25.9" {
+        tom.comer(jerry)
+        tom.correr(24)
+        tom.comer(nibbles)
+        jerry.cumpleaños()
+        tom.comer(jerry)
+        assert.equals(25.9, tom.velocidadMaxima())
+    }
+
+    test "Given: Tom corre 38 mts | When: consultamos velocidadMaxima() | Then: debería retornar 24" {
+        tom.comer(jerry)
+        tom.correr(24)
+        tom.comer(nibbles)
+        jerry.cumpleaños()
+        tom.comer(jerry)
+        tom.correr(38)
+        assert.equals(24, tom.velocidadMaxima())
+    }
+}
+
+describe "Tom | Verificar correr" {
+    test "Given: Tom al inicio | When: corre 20 mts | Then: su energía debería ser 40" {
+        tom.correr(20)
+        assert.equals(40, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: corre 100 mts | Then: su energía debería ser 0" {
+        tom.correr(100)
+        assert.equals(0, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: corre 120 mts | Then: su energía debería ser 0 (no puede ser negativa)" {
+        tom.correr(120)
+        assert.equals(0, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: corre 0 mts | Then: su energía debería seguir siendo 50" {
+        tom.correr(0)
+        assert.equals(50, tom.energia())
+    }
+}
+
+describe "Tom | Verificar comer" {
+    test "Given: Tom al inicio | When: come a Jerry | Then: su energía debería ser 102" {
+        tom.comer(jerry)
+        assert.equals(102, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: come a Nibbles | Then: su energía debería ser 97" {
+        tom.comer(nibbles)
+        assert.equals(97, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: come a Mickey | Then: su energía debería ser 72" {
+        tom.comer(mickey)
+        assert.equals(72, tom.energia())
+    }
+
+    test "Given: Tom come a Jerry y luego a Nibbles | When: consultamos energia() | Then: debería retornar 149" {
+        tom.comer(jerry)
+        tom.comer(nibbles)
+        assert.equals(149, tom.energia())
+    }
+}
+
+describe "Tom | Verificar si puede cazar" {
+    test "Given: Tom al inicio | When: consultamos puedeCazarA(0) | Then: debería retornar true" {
+        assert.that(tom.puedeCazarA(0))
+    }
+
+    test "Given: Tom al inicio | When: consultamos puedeCazarA(20) | Then: debería retornar true" {
+        assert.that(tom.puedeCazarA(20))
+    }
+
+    test "Given: Tom al inicio | When: consultamos puedeCazarA(100) | Then: debería retornar true" {
+        assert.that(tom.puedeCazarA(100))
+    }
+
+    test "Given: Tom al inicio | When: consultamos puedeCazarA(101) | Then: debería retornar false" {
+        assert.that(!tom.puedeCazarA(101))
+    }
+
+    test "Given: Tom corre 100 mts | When: consultamos puedeCazarA(1) | Then: debería retornar false" {
+        tom.correr(100)
+        assert.that(!tom.puedeCazarA(1))
+    }
+}
+
+describe "Tom | Verificar cazar" {
+    test "Given: Tom al inicio | When: caza a Jerry a 20 mts | Then: su energía debería ser 92" {
+        tom.cazar(jerry, 20)
+        assert.equals(92, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: caza a Nibbles a 40 mts | Then: su energía debería ser 77" {
+        tom.cazar(nibbles, 40)
+        assert.equals(77, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: caza a Mickey a 0 mts | Then: su energía debería ser 72" {
+        tom.cazar(mickey, 0)
+        assert.equals(72, tom.energia())
+    }
+
+    test "Given: Tom al inicio | When: intenta cazar a Jerry a 120 mts | Then: su energía debería seguir siendo 50 (no puede cazar)" {
+        tom.cazar(jerry, 120)
+        assert.equals(50, tom.energia())
+    }
+
+    test "Given: Tom corre 100 mts | When: intenta cazar a Mickey a 10 mts | Then: su energía debería seguir siendo 0 (no puede cazar)" {
+        tom.correr(100)
+        tom.cazar(mickey, 10)
+        assert.equals(0, tom.energia())
+    }
+}
